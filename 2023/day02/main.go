@@ -49,11 +49,7 @@ func parseGame(s string) (int, int) {
 				id = 0
 			}
 
-			if val, ok := lowest[colour]; ok {
-				if count > val {
-					lowest[colour] = count
-				}
-			} else {
+			if count > lowest[colour] {
 				lowest[colour] = count
 			}
 		}
