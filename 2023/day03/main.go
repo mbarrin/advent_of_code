@@ -76,12 +76,12 @@ func main() {
 							if v == '*' {
 								count++
 							}
-							if count == 2 {
-								power += total[len(total)-2] * total[len(total)-1]
-							}
 						}
 					}
 				}
+			}
+			if count == 2 {
+				power += total[len(total)-2] * total[len(total)-1]
 			}
 		}
 	}
