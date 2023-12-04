@@ -34,7 +34,7 @@ func main() {
 		for _, a := range strings.Split(x, " ") {
 			if a != "" {
 				data[a]++
-				if data[a] > 1 {
+				if data[a] == 2 {
 					wins += 1
 				}
 			}

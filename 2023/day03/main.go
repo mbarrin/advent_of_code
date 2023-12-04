@@ -47,10 +47,9 @@ func main() {
 						if isNumber(val) {
 							temp = append(temp, val)
 							delete(grid, edge)
+
 							x := point{edge.rowID, edge.colID - 1}
 							left := grid[x]
-							y := point{edge.rowID, edge.colID + 1}
-							right := grid[y]
 							if isNumber(left) {
 								temp = append([]byte{left}, temp...)
 								delete(grid, x)
@@ -61,6 +60,9 @@ func main() {
 									delete(grid, x)
 								}
 							}
+
+							y := point{edge.rowID, edge.colID + 1}
+							right := grid[y]
 							if isNumber(right) {
 								temp = append(temp, right)
 								delete(grid, y)
