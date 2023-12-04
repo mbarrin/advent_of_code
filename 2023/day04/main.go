@@ -30,25 +30,22 @@ func main() {
 		t = strings.Split(t[1], "|")
 		x := strings.Join(t, "")
 
+		wins := 0
 		for _, a := range strings.Split(x, " ") {
 			if a != "" {
 				data[a]++
+				if data[a] > 1 {
+					wins += 1
+				}
 			}
 		}
 
-		foo := 0
-		for _, v := range data {
-			if v > 1 {
-				foo += 1
-			}
-		}
-
-		if foo != 0 {
-			total += math.Pow(2.0, float64(foo-1))
+		if wins != 0 {
+			total += math.Pow(2.0, float64(wins-1))
 		}
 
 		cards += multipliers[counter]
-		for i := 1; i <= foo; i++ {
+		for i := 1; i <= wins; i++ {
 			multipliers[counter+i] += multipliers[counter]
 		}
 		counter++
