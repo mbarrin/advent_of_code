@@ -19,10 +19,16 @@ type info struct {
 	offset   int
 }
 
+type shortcut struct {
+	level   string
+	current int
+}
+
 var transformations = make(map[string]*mapping)
+var shortcuts = make(map[shortcut]int)
 
 func main() {
-	f, err := os.Open("input.txt")
+	f, err := os.Open(os.Args[1])
 	if err != nil {
 		panic(1)
 	}
@@ -54,10 +60,11 @@ func main() {
 			transformations[name].info = append(transformations[name].info, mappingInfo)
 		}
 	}
+	//seeds = []string{"14", "14"}
 	totals := []int{}
 	for _, seed := range seeds {
 		i, _ := strconv.Atoi(seed)
-		totals = append(totals, search("seed", i))
+		totals = append(totals, search("seed", i, i))
 	}
 
 	fmt.Println("part 1:", slices.Min(totals))
@@ -67,22 +74,31 @@ func main() {
 		foo, _ := strconv.Atoi(seeds[i])
 		bar, _ := strconv.Atoi(seeds[i+1])
 		for j := foo; j < foo+bar; j++ {
-			totals = append(totals, search("seed", j))
+			totals = append(totals, search("seed", j, j))
 		}
 	}
 
 	fmt.Println("part 2:", slices.Min(totals))
+
 }
 
-func search(name string, i int) int {
+func search(name string, i, current int) int {
+	s := shortcut{level: name, current: i}
+
+	if val, ok := shortcuts[s]; ok {
+		fmt.Println("quick exit")
+		return val
+	}
+
 	for _, x := range transformations[name].info {
 		if i >= x.min && i <= x.max {
-			i = i + x.offset
+			i += x.offset
 			break
 		}
 	}
 	if transformations[name].to != "location" {
-		i = search(transformations[name].to, i)
+		i = search(transformations[name].to, i, current)
+		shortcuts[s] = i
 	}
 
 	return i
