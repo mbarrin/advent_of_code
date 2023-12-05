@@ -25,7 +25,6 @@ type shortcut struct {
 }
 
 var transformations = make(map[string]*mapping)
-var shortcuts = make(map[shortcut]int)
 
 func main() {
 	f, err := os.Open(os.Args[1])
@@ -56,9 +55,14 @@ func main() {
 		} else {
 			var to, from, count int
 			fmt.Sscanf(lines[i], "%d %d %d", &to, &from, &count)
-			mappingInfo := info{min: from, max: from + count, offset: to - from}
+			mappingInfo := info{min: from, max: from + count - 1, offset: to - from}
 			transformations[name].info = append(transformations[name].info, mappingInfo)
 		}
+	}
+
+	for k, v := range transformations {
+		fmt.Println("name:", k)
+		fmt.Println(v)
 	}
 	//seeds = []string{"14", "14"}
 	totals := []int{}
@@ -83,13 +87,6 @@ func main() {
 }
 
 func search(name string, i, current int) int {
-	s := shortcut{level: name, current: i}
-
-	if val, ok := shortcuts[s]; ok {
-		fmt.Println("quick exit")
-		return val
-	}
-
 	for _, x := range transformations[name].info {
 		if i >= x.min && i <= x.max {
 			i += x.offset
@@ -98,7 +95,6 @@ func search(name string, i, current int) int {
 	}
 	if transformations[name].to != "location" {
 		i = search(transformations[name].to, i, current)
-		shortcuts[s] = i
 	}
 
 	return i
