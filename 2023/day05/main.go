@@ -60,11 +60,6 @@ func main() {
 		}
 	}
 
-	for k, v := range transformations {
-		fmt.Println("name:", k)
-		fmt.Println(v)
-	}
-	//seeds = []string{"14", "14"}
 	totals := []int{}
 	for _, seed := range seeds {
 		i, _ := strconv.Atoi(seed)
