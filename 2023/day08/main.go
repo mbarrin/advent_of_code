@@ -7,6 +7,7 @@ import (
 	"regexp"
 	"strings"
 	"sync"
+	"time"
 )
 
 type node struct {
@@ -18,8 +19,6 @@ type data struct {
 	sync.WaitGroup
 	cycles map[string]int
 }
-
-var nums = []int{}
 
 func main() {
 	f, err := os.Open(os.Args[1])
@@ -48,6 +47,7 @@ func main() {
 		nodes[parsed[0]] = node{left: parsed[1], right: parsed[2]}
 	}
 
+	a := time.Now()
 	d := data{cycles: map[string]int{}}
 	for _, start := range starts {
 		d.Add(1)
@@ -62,6 +62,7 @@ func main() {
 
 	fmt.Println("part 1:", d.cycles["AAA"])
 	fmt.Println("part 2:", LCM(params[0], params[1], params[1:]...))
+	fmt.Printf("\nTotal time: %s\n", time.Since(a))
 }
 
 func steps(start string, instructions []string, nodes map[string]node, d *data) {
