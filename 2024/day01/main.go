@@ -7,6 +7,8 @@ import (
 	"slices"
 	"strconv"
 	"strings"
+
+	"github.com/mbarrin/advent_of_code/util"
 )
 
 func main() {
@@ -48,11 +50,7 @@ func main() {
 	similarity := 0
 
 	for i := range left {
-		dist := (right[i] - left[i])
-		if dist < 0 {
-			dist = 0 - dist
-		}
-		distance += dist
+		distance += util.Abs(right[i] - left[i])
 
 		if val, ok := countMap[left[i]]; ok {
 			similarity += left[i] * val
