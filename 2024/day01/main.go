@@ -5,39 +5,31 @@ import (
 	"fmt"
 	"os"
 	"slices"
-	"strconv"
-	"strings"
+	"time"
 
 	"github.com/mbarrin/advent_of_code/util"
 )
 
 func main() {
+	defer util.TimeTaken(time.Now())
+
 	f, err := os.Open("input.txt")
 	if err != nil {
 		os.Exit(1)
 	}
 
-	s := bufio.NewScanner(f)
-
 	var (
-		left, right []int
-		countMap    = make(map[int]int)
+		left, right          []int
+		countMap             = make(map[int]int)
+		distance, similarity int
 	)
 
+	s := bufio.NewScanner(f)
 	for s.Scan() {
-		line := s.Text()
-		split := strings.Split(line, " ")
+		var leftNum, rightNum int
+		fmt.Sscanf(s.Text(), "%d   %d", &leftNum, &rightNum)
 
-		leftNum, err := strconv.Atoi(split[0])
-		if err != nil {
-			os.Exit(1)
-		}
 		left = append(left, leftNum)
-
-		rightNum, err := strconv.Atoi(split[len(split)-1])
-		if err != nil {
-			os.Exit(1)
-		}
 		right = append(right, rightNum)
 
 		countMap[rightNum]++
@@ -45,9 +37,6 @@ func main() {
 
 	slices.Sort(left)
 	slices.Sort(right)
-
-	distance := 0
-	similarity := 0
 
 	for i := range left {
 		distance += util.Abs(right[i] - left[i])
