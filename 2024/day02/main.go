@@ -15,7 +15,7 @@ import (
 func main() {
 	defer util.TimeTaken(time.Now())
 
-	f, err := os.Open("sample.txt")
+	f, err := os.Open("badsample.txt")
 	if err != nil {
 		os.Exit(1)
 	}
@@ -39,24 +39,36 @@ func main() {
 }
 
 func isSafe(s []int) bool {
-	if safeGrowth(s) {
+	if safeGrowth(s, 0) < 2 {
 		return true
 	}
-	slices.Reverse(s)
-	if safeGrowth(s) {
-		return true
-	}
+	//slices.Reverse(s)
+	//return safeGrowth(s, 0) < 2
+	//if safeGrowth(s, 0) < 2 {
+	//	return true
+	//}
+	fmt.Println(s)
 	return false
 }
 
-func safeGrowth(s []int) bool {
-	failures := 0
+func safeGrowth(s []int, failures int) int {
+	if failures > 1 {
+		return failures
+	}
+	fmt.Println(s)
+
 	for i := 0; i < len(s)-1; i += 1 {
-		diff := s[i+1] - s[i]
-		if diff < 1 || diff > 3 {
-			failures += 1
-			return false
+		if s[i+1]-s[i] < 1 || s[i+1]-s[i] > 3 {
+			if i == len(s)-2 && failures < 1 {
+				fmt.Println(i)
+				return failures
+			}
+
+			sCopy := make([]int, len(s))
+			copy(sCopy, s)
+			temp := slices.Delete(sCopy, i, i+1)
+			failures += safeGrowth(temp, failures+1)
 		}
 	}
-	return true
+	return failures
 }
