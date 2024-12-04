@@ -1,10 +1,10 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"os"
 	"regexp"
-	"strings"
 	"time"
 
 	"github.com/mbarrin/advent_of_code/util"
@@ -23,32 +23,22 @@ func main() {
 		fmt.Println(err.Error())
 		os.Exit(1)
 	}
-	stringedInput := string(input)
-
-	fmt.Println("part 1:", getMults(stringedInput))
-
-	cleaned := removeMults(stringedInput)
-	fmt.Println("part 2:", getMults(cleaned))
+	fmt.Println("part 1:", sumMults(input))
+	fmt.Println("part 2:", sumMults(removeMults(input)))
 }
 
-func getMults(input string) int {
-	matches := pattern.FindAllString(input, -1)
+func sumMults(input []byte) (total int) {
+	matches := pattern.FindAll(input, -1)
 
-	total := 0
 	for _, x := range matches {
-		one, two := 0, 0
-		fmt.Sscanf(x, "mul(%d,%d)", &one, &two)
-
+		var one, two int
+		fmt.Sscanf(string(x), "mul(%d,%d)", &one, &two)
 		total += (one * two)
 	}
 	return total
 }
 
-func removeMults(input string) string {
-	donts := negatePattern.FindAllString(input, -1)
-	for _, x := range donts {
-		input = strings.Replace(input, x, "", 1)
-	}
-	blah := strings.Split(input, "don't()")
-	return blah[0]
+func removeMults(input []byte) []byte {
+	input = negatePattern.ReplaceAll(input, []byte{})
+	return bytes.Split(input, []byte("don't()"))[0]
 }

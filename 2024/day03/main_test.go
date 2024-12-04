@@ -38,7 +38,7 @@ func TestRemoveMultsRegex(t *testing.T) {
 	}
 
 	for name, tc := range tests {
-		output := removeMults(tc.input)
-		assert.Equal(t, tc.expected, output, name)
+		output := removeMults([]byte(tc.input))
+		assert.Equal(t, []byte(tc.expected), output, name)
 	}
 }
