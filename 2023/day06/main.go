@@ -6,17 +6,18 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
 )
 
 var r = regexp.MustCompile(`(\d+)`)
 
 func main() {
-
 	f, err := os.ReadFile(os.Args[1])
 	if err != nil {
 		panic(1)
 	}
 
+	start := time.Now()
 	nums := r.FindAllString(string(f), -1)
 	info := map[int]int{}
 	for i := 0; i < len(nums)/2; i++ {
@@ -34,10 +35,11 @@ func main() {
 
 	t, d := strings.Join(nums[:len(nums)/2], ""), strings.Join(nums[len(nums)/2:], "")
 
-	time, _ := strconv.Atoi(t)
+	tme, _ := strconv.Atoi(t)
 	dist, _ := strconv.Atoi(d)
 
-	fmt.Println("part 2:", succesful(time, dist))
+	fmt.Println("part 2:", succesful(tme, dist))
+	fmt.Println(time.Since(start))
 }
 
 func succesful(t, d int) (count int) {
@@ -46,5 +48,5 @@ func succesful(t, d int) (count int) {
 			count++
 		}
 	}
-	return count
+	return
 }

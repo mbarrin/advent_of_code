@@ -31,7 +31,6 @@ func main() {
 	if err != nil {
 		panic(1)
 	}
-
 	s := bufio.NewScanner(f)
 
 	game := map[int]hands{}
@@ -65,6 +64,7 @@ func main() {
 
 	total := 0
 	for i := range ranks {
+		fmt.Println(ranks[i])
 		total += ranks[i].bid * (i + 1)
 	}
 
@@ -86,28 +86,55 @@ func rank(b []int) int {
 		m[x]++
 	}
 
+	orderedKeys := []int{}
+	for k := range m {
+		orderedKeys = append(orderedKeys, k)
+	}
+	slices.Sort(orderedKeys)
+
+	maxKey, maxVal := 0, 0
+	for _, x := range orderedKeys {
+		if m[x] >= maxVal {
+			maxKey = x
+			maxVal = m[x]
+		}
+	}
+
+	//fmt.Println("key:", maxKey)
+	//fmt.Println("val:", maxVal)
+
+	m[maxKey] += m[11]
+
+	delete(m, 11)
+
+	var rank int
+
 	switch len(m) {
+	case 0:
+		rank = 7
 	case 1:
-		return 7
+		rank = 7
 	case 2:
+		rank = 5
 		for _, v := range m {
 			if v == 4 {
-				return 6
+				rank = 6
 			}
 		}
-		return 5
 	case 3:
+		rank = 3
 		for _, v := range m {
 			if v == 3 {
-				return 4
+				rank = 4
 			}
 		}
-		return 3
 	case 4:
-		return 2
+		rank = 2
 	default:
-		return 1
+		rank = 1
 	}
+
+	return rank
 }
 
 func (h hands) Len() int {
@@ -116,10 +143,21 @@ func (h hands) Len() int {
 
 func (h hands) Less(i, j int) bool {
 	for x := range h[i].cards {
-		x, y := h[i].cards[x], h[j].cards[x]
-		if x < y {
+		foo, bar := h[i].cards[x], h[j].cards[x]
+
+		if foo == 11 {
+			foo = 1
+		}
+
+		if bar == 11 {
+			bar = 1
+		}
+
+		if foo < bar {
 			return true
-		} else if x > y {
+		}
+
+		if foo > bar {
 			return false
 		}
 	}

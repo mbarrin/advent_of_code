@@ -50,7 +50,6 @@ func main() {
 			name, dest = mappingLine[0], mappingLine[2]
 
 			transformations[name] = &mapping{to: dest}
-
 		} else if lines[i] == "" {
 		} else {
 			var to, from, count int
@@ -78,7 +77,6 @@ func main() {
 	}
 
 	fmt.Println("part 2:", slices.Min(totals))
-
 }
 
 func search(name string, i, current int) int {
