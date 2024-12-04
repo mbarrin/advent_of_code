@@ -33,6 +33,7 @@ func sumMults(input []byte) (total int) {
 	for _, x := range matches {
 		var one, two int
 		fmt.Sscanf(string(x), "mul(%d,%d)", &one, &two)
+
 		total += (one * two)
 	}
 	return total
